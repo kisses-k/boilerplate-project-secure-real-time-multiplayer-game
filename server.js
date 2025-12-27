@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const expect = require('chai').expect;
 const socket = require('socket.io');
 const helmet = require('helmet');
+const cors = require('cors');
 //const nocache = require('nocache');
 
 const fccTestingRoutes = require('./routes/fcctesting.js');
@@ -11,13 +12,23 @@ const runner = require('./test-runner.js');
 
 const app = express();
 const server = require('http').createServer(app);
-const io = socket(server);
+// <--- 2. UPDATE SOCKET SETUP TO ALLOW CORS --->
+const io = socket(server, {
+  cors: {
+    origin: '*',
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use('/public', express.static(process.cwd() + '/public'));
 app.use('/assets', express.static(process.cwd() + '/assets'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// <--- 3. ENABLE CORS MIDDLEWARE --->
+// This allows FreeCodeCamp to talk to your server
+app.use(cors({origin: '*'}));
 
 // --- SECURITY HEADERS (Helmet v3.21.3) ---
 app.use(helmet.noSniff());
@@ -31,7 +42,8 @@ app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'self'"],
     scriptSrc: ["'self'", "'unsafe-inline'", "https://code.jquery.com/jquery-3.5.1.min.js"],
     styleSrc: ["'self'", "'unsafe-inline'"],
-    imgSrc: ["'self'", "data:", "*"]
+    imgSrc: ["'self'", "data:", "*"],
+    connectSrc: ["'self'", "*"] // Allow connections to anywhere (for sockets)
   }
 }));
 
