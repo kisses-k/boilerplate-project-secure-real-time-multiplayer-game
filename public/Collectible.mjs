@@ -4,19 +4,16 @@ class Collectible {
     this.y = y;
     this.value = value;
     this.id = id;
+    this.w = 15; // <--- The tests require these dimensions to exist!
+    this.h = 15; // <---
   }
 
   draw(context) {
-    context.fillStyle = '#f1c40f'; // Gold color
-    context.fillRect(this.x, this.y, 15, 15); // Draw a 15x15 box
+    context.fillStyle = '#f1c40f';
     context.strokeStyle = 'white';
-    context.strokeRect(this.x, this.y, 15, 15);
+    context.fillRect(this.x, this.y, this.w, this.h);
+    context.strokeRect(this.x, this.y, this.w, this.h);
   }
 }
 
-/*
-  Note: Export is handled automatically by the boilerplate loader, 
-  but standard ES6 modules use 'export default'. 
-  The boilerplate uses <script type="module"> so:
-*/
 export default Collectible;

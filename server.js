@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const expect = require('chai').expect;
 const socket = require('socket.io');
 const helmet = require('helmet');
-const nocache = require('nocache');
+//const nocache = require('nocache');
 
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner.js');
@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // --- SECURITY HEADERS (Helmet v3.21.3) ---
 app.use(helmet.noSniff());
 app.use(helmet.xssFilter());
-app.use(nocache());
+app.use(helmet.noCache());
 app.use(helmet.hidePoweredBy({ setTo: 'PHP 7.4.3' }));
 
 // Content Security Policy to allow client-side scripts
